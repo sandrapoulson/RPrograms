@@ -1,45 +1,30 @@
-dat <- read.csv("~/Dropbox/classes_2016/GLM/ttest_data.csv")
-attach(dat)
-
-dat$difference <- dat$post - dat$pre
-meanDiff <- mean(dat$difference)
-
-dat$B0 <- meanDiff
-dat$e <- dat$difference - dat$B0
-
-N = length(dat$difference)
-dat$e2 <- dat$e * dat$e
-SampleVariance <- sum(dat$e2)/N
-
+ttest_data$difference <- ttest_data$post - ttest_data$pre
+#lay out your models and hypotheses
+#then calculate mean
+meanDiff <- mean(ttest_data$difference)
+#add the mean Bo
+ttest_data$BO <- meanDiff
+#add the errors
+ttest_data$e <- ttest_data$difference - ttest_data$BO
+#add the variance, e*e
+ttest_data$e2 <- ttest_data$e * ttest_data$e
+# calculating degrees of freedom
+N = length(ttest_data$difference)
 df <- N - 1
-estPopVariance <- sum(dat$e2)/df
-
+#this gives me 9 degrees of freedom
+#estimate sample variance, population variance
+SampleVariance <- sum(ttest_data$e2)/N
+estPopVariance <- sum(ttest_data$e2)/df
+#central limit theorem
 estPopStd <- sqrt(estPopVariance)
-
-# Wil's favourite thing! CENTRAL LIMIT!!!!!!!
-# Standard Error or the sampling distribution of means
-
+#calculate standard error (putting together the t-test)
 SE <- estPopStd/sqrt(N)
-
+#first t-test will run, save so can compare
+#comes out large, rather cheaty, why
 t.1 <- meanDiff/SE
-
-t.2 <- lm(dat$difference ~ 1)
+#second t-test, the only test you'll need for GLM if you use R...
+#lm has more flexibility than glm
+#~ is = in the R glm function, has to do with linear algebra, ask Jack
+t.2 <- lm(ttest_data$difference ~ 1)
+#this gives you estimations in the console
 summary(t.2)
-
-
-r.1 <- cor.test(dat$pre,dat$post)
-r.2 <- lm(dat$pre ~ dat$post)
-r.3 <- lm(dat$pre ~ 1 + dat$post)
-
-# scale - z-scores a variable
-
-r.4 <- lm(scale(dat$pre) ~ scale(dat$post))
-
-
-# independent samples ttest
-
-dat <- read.csv("~/Dropbox/classes_2016/GLM/ttest_data2.csv")
-attach(dat)
-
-t.1 <- lm(dat$pre ~ 1 + dat$condition)
-cor.test(dat$pre, dat$condition2)
