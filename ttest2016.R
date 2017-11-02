@@ -1,3 +1,4 @@
+#add a variable for the difference between the pre and post data
 ttest_data$difference <- ttest_data$post - ttest_data$pre
 #lay out your models and hypotheses
 #then calculate mean
@@ -23,8 +24,8 @@ SE <- estPopStd/sqrt(N)
 #comes out large, rather cheaty, why
 t.1 <- meanDiff/SE
 #second t-test, the only test you'll need for GLM if you use R...
-#lm has more flexibility than glm
-#~ is = in the R glm function, has to do with linear algebra, ask Jack
+#lm() has more flexibility than glm()
+#~ is = in the R glm function, has to do with linear algebra
 t.2 <- lm(ttest_data$difference ~ 1)
 #this gives you estimations in the console
 summary(t.2)
